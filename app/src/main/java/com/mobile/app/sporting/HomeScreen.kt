@@ -166,12 +166,13 @@ fun HomeScreen() {
         val unselectedWidth = constraints.maxWidth / (itemCount + 1)
         val selectedWidth = unselectedWidth + (unselectedWidth*0.5).toInt()
 
+        var selectedItemHeight = 0
         val place = measurables.mapIndexed { index, measurable ->
             if (index == selectedIndex) {
                 measurable.measure(constraints = constraints.copy(
                         minWidth = selectedWidth,
                         maxWidth = selectedWidth
-                ))
+                )).also { selectedItemHeight = it.height }
             } else {
                 measurable.measure(constraints = constraints.copy(
                         minWidth = unselectedWidth,
@@ -185,9 +186,14 @@ fun HomeScreen() {
                 place.maxByOrNull { it.height }?.height ?: 0
         ) {
             var xPos = 0
-            place.forEach {
-                it.placeRelative(xPos, 0)
-                xPos += it.width
+            place.forEachIndexed { index, placeable ->
+                if (index == selectedIndex) {
+                    placeable.placeRelative(xPos, 0)
+                } else {
+                    val yPos = (selectedItemHeight - placeable.height)/2
+                    placeable.placeRelative(xPos, yPos)
+                }
+                xPos += placeable.width
             }
         }
     }
@@ -206,6 +212,7 @@ fun HomeScreen() {
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                     .clickable(onClick = { onSelectedIndexChange(index) })
+                    //.background(color = Color.Green)
     )
 }
 
