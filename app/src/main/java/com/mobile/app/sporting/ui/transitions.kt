@@ -60,3 +60,45 @@ val ratingTransDef = transitionDefinition<String> {
         )
     }
 }
+
+val iconProp = FloatPropKey()
+val iconTransitionDefinition = transitionDefinition<Int> {
+    state(1) {
+        this[iconProp] = 1f
+    }
+
+    state(2) {
+        this[iconProp] = 1f
+    }
+
+    transition(1 to 2) {
+        iconProp using keyframes {
+            durationMillis = 500
+            1f at 0 with LinearOutSlowInEasing
+            0.1f at 400 with LinearOutSlowInEasing
+            1f at 500 with FastOutSlowInEasing
+        }
+    }
+}
+
+val rotationX = FloatPropKey()
+val rotationZ = FloatPropKey()
+
+val weekChartTransitionDef = transitionDefinition<String> {
+    state("start") {
+        this[rotationX] = 60.0f
+        this[rotationZ] = -20f
+    }
+
+    state("end") {
+        this[rotationX] = 0f
+        this[rotationZ] = 0f
+    }
+
+    transition("start" to "end") {
+        rotationX using tween(
+                durationMillis = 1000,
+                easing = LinearOutSlowInEasing
+        )
+    }
+}

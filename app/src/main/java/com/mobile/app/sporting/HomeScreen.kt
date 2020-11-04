@@ -1,10 +1,6 @@
 package com.mobile.app.sporting
 
-import androidx.compose.animation.Transition
-import androidx.compose.animation.animate
-import androidx.compose.animation.animatedFloat
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.transition
+import androidx.compose.animation.*
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -27,7 +23,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.mobile.app.sporting.ui.*
 
@@ -237,12 +232,25 @@ fun HomeScreen() {
 fun WeeklyChart(
         level: List<Float> = listOf()
 ) {
+    val transition = transition(
+            definition = weekChartTransitionDef,
+            toState = "end",
+            initState = "start"
+    )
+
     Surface(
             shape = RoundedCornerShape(16.dp),
             color = Color(0xFFfefffe),
             elevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
                     .preferredHeight(128.dp)
+                    .drawLayer(
+                            //rotationZ = transition[rotationZ],
+                            transformOrigin = TransformOrigin(2f, -0.5f),
+                            rotationX = transition[rotationX],
+                            clip = true
+                            //scaleX = 0.5f
+                    )
     ) {
 
     }
@@ -260,9 +268,20 @@ fun PeriodRow() {
         Period(label = "Month")
 
         IconButton(onClick = {}) {
+            val state = transition(
+                    definition = iconTransitionDefinition,
+                    toState = 2,
+                    initState = 1,
+            )
+            val icp = state[iconProp]
+            
             Box(
                     modifier = Modifier.size(64.dp)
-                            .background(color = Color(0xff2f2e38), shape = CircleShape),
+                            .background(color = Color(0xff2f2e38), shape = CircleShape)
+                            .drawLayer(
+                                    scaleY = icp,
+                                    scaleX = icp
+                            ),
                     alignment = Alignment.Center
             ) {
                 Icon(Icons.Default.Add)
