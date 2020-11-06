@@ -8,6 +8,9 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.setContent
 import androidx.core.view.WindowCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.ui.tooling.preview.Preview
 import com.mobile.app.sporting.ui.SportingTheme
 
@@ -18,8 +21,15 @@ class MainActivity : AppCompatActivity() {
         setContent {
             SportingTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    SelectionDetails()
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "home") {
+                    composable("home") {
+                        Surface(color = MaterialTheme.colors.background) {
+                            HomeScreen(navController)
+                        }
+                    }
+                    composable("details") { SelectionDetails(navController) }
                 }
             }
         }

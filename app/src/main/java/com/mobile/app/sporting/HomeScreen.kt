@@ -24,10 +24,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.navigate
 import com.mobile.app.sporting.ui.*
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
     var selectedIndex by remember { mutableStateOf(0) }
 
     Box(
@@ -136,7 +141,7 @@ fun HomeScreen() {
             Spacer(modifier = Modifier.height(16.dp))
             WeeklyChart()
             Spacer(modifier = Modifier.preferredHeight(32.dp))
-            PeriodRow()
+            PeriodRow(navController)
             Spacer(modifier = Modifier.preferredHeight(48.dp))
         }
 
@@ -230,7 +235,8 @@ fun HomeScreen() {
 
 @Composable
 fun WeeklyChart(
-        level: List<Float> = listOf()
+        level: List<Float> = listOf(),
+        modifier: Modifier = Modifier
 ) {
     val transition = transition(
             definition = weekChartTransitionDef,
@@ -241,23 +247,16 @@ fun WeeklyChart(
     Surface(
             shape = RoundedCornerShape(16.dp),
             color = Color(0xFFfefffe),
-            elevation = 2.dp,
             modifier = Modifier.fillMaxWidth()
-                    .preferredHeight(128.dp)
-                    .drawLayer(
-                            //rotationZ = transition[rotationZ],
-                            transformOrigin = TransformOrigin(2f, -0.5f),
-                            rotationX = transition[rotationX],
-                            clip = true
-                            //scaleX = 0.5f
-                    )
+                    .preferredHeight(180.dp),
+            elevation = 4.dp
     ) {
 
     }
 }
 
 @Composable
-fun PeriodRow() {
+fun PeriodRow(navController: NavController) {
     Row(
             Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -267,7 +266,7 @@ fun PeriodRow() {
         Period(label = "Week", isSelected = true)
         Period(label = "Month")
 
-        IconButton(onClick = {}) {
+        IconButton(onClick = { navController.navigate("details") }) {
             val state = transition(
                     definition = iconTransitionDefinition,
                     toState = 2,
@@ -302,7 +301,7 @@ fun Period(
     ) {
         Text(
                 text = label,
-                fontSize = 22.sp,
+                fontSize = 16.sp,
                 fontWeight = if (isSelected) FontWeight.W600 else FontWeight.Normal,
                 color = if (isSelected) Color(0xff2f2e38) else Color(0xffcbcccb)
         )

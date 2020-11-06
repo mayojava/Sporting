@@ -21,10 +21,21 @@ import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mobile.app.sporting.ui.*
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@Composable fun SelectionDetails(
+@Composable fun SelectionDetails(navController: NavController) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val buttonRef = createRef()
+        BottomButton(modifier = Modifier.constrainAs(buttonRef) {
+            bottom.linkTo(parent.bottom)
+        })
+    }
+}
+
+@Composable fun SelectionDetailss(
+        navController: NavController,
         modifier: Modifier = Modifier
 ) {
     val ctx = ContextAmbient.current
@@ -41,36 +52,39 @@ import dev.chrisbanes.accompanist.coil.CoilImage
                 modifier = Modifier.fillMaxWidth(0.85f)
                         .preferredHeight(180.dp)
                         .align(Alignment.Center)
-                        .offset(y = -90.dp)
+                        .offset(y = -65.dp)
         ) {
 
         }
-        
-        Box(
-                modifier = Modifier
-                        .background(color = seeMoreBg, shape = RoundedCornerShape(32.dp))
-                        .fillMaxWidth(0.6f)
-                        .align(Alignment.BottomCenter)
-                        .padding(start = 24.dp, end = 8.dp)
-                        .padding(vertical = 16.dp)
-                        .clickable(onClick = {})
-        ) {
-            Text(
-                    text = "See more",
-                    color = Color.White,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.align(Alignment.CenterStart)
+    }
+}
+
+@Composable fun BottomButton(
+        modifier: Modifier = Modifier
+) {
+    Box(
+            modifier = modifier
+                    .clickable(onClick = {})
+                    .background(color = seeMoreBg, shape = RoundedCornerShape(32.dp))
+                    .fillMaxWidth(0.6f)
+                    .padding(start = 24.dp, end = 8.dp)
+                    .padding(vertical = 16.dp)
+    ) {
+        Text(
+                text = "See more",
+                color = Color.White,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.align(Alignment.CenterStart)
+        )
+        Box(modifier = Modifier.size(32.dp)
+                .align(Alignment.CenterEnd)
+                .background(Color.White, shape = CircleShape)) {
+            Icon(
+                    Icons.Default.KeyboardArrowRight,
+                    tint = seeMoreBg,
+                    modifier = Modifier.align(Alignment.Center)
             )
-            Box(modifier = Modifier.size(32.dp)
-                    .align(Alignment.CenterEnd)
-                    .background(Color.White, shape = CircleShape)) {
-                Icon(
-                        Icons.Default.KeyboardArrowRight,
-                        tint = seeMoreBg,
-                        modifier = Modifier.align(Alignment.Center)
-                )
-            }
         }
     }
 }
@@ -120,7 +134,7 @@ import dev.chrisbanes.accompanist.coil.CoilImage
                     ) {
                         Text(
                                 text = "23",
-                                color = Color.Black,
+                                color = headerCounterTextColor,
                                 modifier = Modifier.align(Alignment.Center),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp

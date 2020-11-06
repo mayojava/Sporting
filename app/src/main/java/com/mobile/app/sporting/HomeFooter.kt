@@ -44,8 +44,9 @@ val mockSurfers = listOf(
             )
 
             Text(
-                text = "Rental equipment",
-                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
+                    text = "Rental equipment",
+                    color = Color.White,
+                    style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
             )
         }
 
