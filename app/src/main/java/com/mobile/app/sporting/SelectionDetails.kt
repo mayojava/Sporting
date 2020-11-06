@@ -12,13 +12,17 @@ import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.ContextAmbient
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -26,36 +30,69 @@ import com.mobile.app.sporting.ui.*
 import dev.chrisbanes.accompanist.coil.CoilImage
 
 @Composable fun SelectionDetails(navController: NavController) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val buttonRef = createRef()
-        BottomButton(modifier = Modifier.constrainAs(buttonRef) {
-            bottom.linkTo(parent.bottom)
-        })
+    Box(modifier = Modifier.fillMaxSize()) {
+        ConstraintLayout(
+                modifier = Modifier.fillMaxSize()
+                        .background(color = surfaceColor)
+        ) {
+            val (
+                    headerRef,
+                    buttonRef,
+                    gapRef,
+                    itemsRef) = createRefs()
+
+            Header(modifier = Modifier.constrainAs(headerRef) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }, navController = navController)
+
+            BottomButton(modifier = Modifier.constrainAs(buttonRef) {
+                bottom.linkTo(parent.bottom, margin = 24.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            })
+
+            Spacer(modifier = Modifier.height(80.dp).width(6.dp).background(Color.Blue).constrainAs(gapRef) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(headerRef.bottom)
+            })
+
+            Column(
+                    modifier = Modifier.fillMaxWidth()
+                            .constrainAs(itemsRef) {
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                                top.linkTo(gapRef.bottom)
+                                bottom.linkTo(buttonRef.top, margin = 24.dp)
+                            }
+            ) {
+                mockItems.forEach {
+                    ItemRow(data = it, isHighlighted = it.row == 2)
+                }
+            }
+        }
+
+        GraphCard(modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth(0.85f)
+                .offset(y = 200.dp)
+                .height(180.dp)
+        )
     }
 }
 
-@Composable fun SelectionDetailss(
-        navController: NavController,
+@Composable fun GraphCard(
         modifier: Modifier = Modifier
 ) {
-    val ctx = ContextAmbient.current
-    Box(
-            modifier = modifier.fillMaxSize()
-                    .background(color = surfaceColor)
-                    .padding(bottom = 32.dp)
+    Surface(
+            shape = RoundedCornerShape(16.dp),
+            color = graphCardBg,
+            elevation = 4.dp,
+            modifier = modifier
     ) {
-        Header(modifier = Modifier.fillMaxWidth())
-        Surface(
-                shape = RoundedCornerShape(16.dp),
-                color = graphCardBg,
-                elevation = 4.dp,
-                modifier = Modifier.fillMaxWidth(0.85f)
-                        .preferredHeight(180.dp)
-                        .align(Alignment.Center)
-                        .offset(y = -65.dp)
-        ) {
 
-        }
     }
 }
 
@@ -90,17 +127,18 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 }
 
 @Composable fun Header(
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        navController: NavController
 ) {
     val imgUrl = "https://i.pravatar.cc/200?img=30"
 
     Box(modifier = modifier
-            .fillMaxHeight(0.4f)
+            .height(300.dp)
             .background(
                     color = selectionHeaderBgColor,
                     shape = RoundedCornerShape(bottomRight = 32.dp, bottomLeft = 32.dp))
     ) {
-        IconButton(onClick = {}, modifier = Modifier.padding(top = 36.dp)) {
+        IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.padding(top = 36.dp)) {
             Icon(Icons.Default.ArrowBack, tint = Color.White)
         }
 
@@ -161,3 +199,70 @@ import dev.chrisbanes.accompanist.coil.CoilImage
         }
     }
 }
+
+@Composable fun ItemRow(
+        data: ItemRowData,
+        isHighlighted: Boolean,
+        modifier: Modifier = Modifier
+) {
+    Surface(
+            color = if (isHighlighted) graphCardBg else surfaceColor,
+            shape = if (isHighlighted) RoundedCornerShape(topRight = 56.dp) else RectangleShape,
+            modifier = modifier.fillMaxWidth()
+    ) {
+        Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).padding(end = 24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Spacer(modifier = Modifier.size(8.dp))
+            RowNumber(isHighlighted = isHighlighted, data.row)
+            Column(horizontalAlignment = Alignment.Start) {
+
+                Row(modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = data.country, color = textColorOne)
+                    Icon(Icons.Default.Star,
+                            tint = if (isHighlighted) selectedIconColor else unselectedColor,
+                    )
+                }
+                Spacer(modifier = Modifier.size(2.dp))
+                Text(text = data.title, color = textColorTwo, fontSize = 18.sp, fontWeight = FontWeight.W500)
+                Spacer(modifier = Modifier.size(2.dp))
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Text(text = data.price, color = textColorOne)
+                    Text(
+                            text = "more",
+                            color = if (isHighlighted) selectedColor else unselectedColor,
+                            textDecoration = TextDecoration.Underline
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable fun RowNumber(isHighlighted: Boolean, row: Int) {
+    Box(
+            modifier = Modifier
+                    .size(32.dp)
+                    .background(
+                            color = if (isHighlighted) selectedColor else unselectedColor,
+                            shape = if (isHighlighted) RoundedCornerShape(16.dp) else CircleShape
+                    )
+    ) {
+        Text(text = "$row", color = rowNumberTextColor, modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+data class ItemRowData(
+        val row: Int,
+        val country: String,
+        val title: String,
+        val price: String
+)
+
+val mockItems = listOf(
+        ItemRowData(1,"Australia", "Rent Surfing on Sydney's", "from $61.00"),
+        ItemRowData(2,"USA", "Rent Surfing on California", "from $72.00")
+)

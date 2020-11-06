@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             SportingTheme {
-                // A surface container using the 'background' color from the theme
                 val navController = rememberNavController()
 
                 NavHost(navController = navController, startDestination = "home") {
