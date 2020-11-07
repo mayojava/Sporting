@@ -102,3 +102,21 @@ val weekChartTransitionDef = transitionDefinition<String> {
         )
     }
 }
+
+val barLoadPropKey = FloatPropKey()
+val barLoadTransitionDef = transitionDefinition<Int> {
+    state(1) {
+        this[barLoadPropKey] = 1f
+    }
+
+    state(2) {
+        this[barLoadPropKey] = 0f
+    }
+
+    transition(1 to 2) {
+        barLoadPropKey using tween(
+            durationMillis = 1500,
+            easing = FastOutSlowInEasing//CubicBezierEasing(0.2f, 0.5f, 0.3f, 0.8f)
+        )
+    }
+}

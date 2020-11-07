@@ -280,7 +280,18 @@ fun WeeklyChart(
         fillColor: Color,
         modifier: Modifier = Modifier) {
 
-    val h = (load) * with(DensityAmbient.current) { 120.dp.toIntPx() }
+    val state = transition(
+            definition = barLoadTransitionDef,
+            toState = 2,
+            initState = 1
+    )
+
+    val multiplier = if (state[barLoadPropKey] >= load) {
+        state[barLoadPropKey]
+    } else {
+        load
+    }
+    val height = (multiplier) * with(DensityAmbient.current) { 120.dp.toIntPx() }
 
     Box(modifier = Modifier
             .background(color = bgColor, shape = RoundedCornerShape(3.dp))
@@ -288,7 +299,7 @@ fun WeeklyChart(
         Spacer(modifier.width(6.dp).height(120.dp))
         Spacer(modifier = modifier
                 .width(6.dp)
-                .height(with(DensityAmbient.current) { h.toDp()})
+                .height(with(DensityAmbient.current) { height.toDp()})
                 .background(color = fillColor, shape = RoundedCornerShape(3.dp))
                 .align(Alignment.BottomCenter))
     }
