@@ -265,7 +265,6 @@ fun PeriodRow(navController: NavController) {
         Period(label = "Day")
         Period(label = "Week", isSelected = true)
         Period(label = "Month")
-
         IconButton(onClick = { navController.navigate("details") }) {
             val state = transition(
                     definition = iconTransitionDefinition,

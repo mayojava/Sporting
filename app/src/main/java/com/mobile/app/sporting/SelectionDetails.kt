@@ -1,5 +1,6 @@
 package com.mobile.app.sporting
 
+import android.text.TextPaint
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,12 +18,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.drawLayer
+import androidx.compose.ui.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.ContextAmbient
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -212,7 +217,6 @@ import dev.chrisbanes.accompanist.coil.CoilImage
     ) {
         Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).padding(end = 24.dp),
-                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Spacer(modifier = Modifier.size(8.dp))
@@ -243,15 +247,75 @@ import dev.chrisbanes.accompanist.coil.CoilImage
 }
 
 @Composable fun RowNumber(isHighlighted: Boolean, row: Int) {
-    Box(
+
+    if (isHighlighted) {
+        StyledRowNumber(width = 24.dp, height = 48.dp) {
+            Text(text = "$row", modifier = Modifier.align(Alignment.Center), color = rowNumberTextColor)
+        }
+    } else {
+        RegularRowNumber(row = row)
+    }
+}
+
+@Composable fun RegularRowNumber(row: Int) {
+        Box(
             modifier = Modifier
                     .size(32.dp)
-                    .background(
-                            color = if (isHighlighted) selectedColor else unselectedColor,
-                            shape = if (isHighlighted) RoundedCornerShape(16.dp) else CircleShape
-                    )
+                    .background(color = unselectedColor, shape = CircleShape)
     ) {
         Text(text = "$row", color = rowNumberTextColor, modifier = Modifier.align(Alignment.Center))
+    }
+}
+
+@Composable fun StyledRowNumber(
+        width: Dp,
+        height: Dp,
+        content: @Composable BoxScope.() -> Unit) {
+    Box(modifier = Modifier
+            .width(width)
+            .height(height)
+            .drawIcon(bgColor = selectedColor)
+    ) {
+        content()
+    }
+}
+
+fun Modifier.drawIcon(bgColor: Color) = this.drawBehind {
+    val paint = Paint().apply {
+        isAntiAlias = true
+        color = bgColor
+    }
+    
+    drawIntoCanvas { canvas ->
+        val arcHeight = size.height/4
+        
+        val rect = Rect(
+                topLeft = Offset(0f, arcHeight),
+                bottomRight = Offset(size.width, size.height-arcHeight)
+        )
+
+        canvas.drawRect(rect, paint)
+
+        canvas.drawArc(
+                left = 0f,
+                top = 0f,
+                right = size.width,
+                bottom = arcHeight*2,
+                startAngle = 360f,
+                sweepAngle = -180f,
+                useCenter = false, paint = paint
+        )
+
+        canvas.drawArc(
+                left = 0f,
+                top = size.height-(arcHeight*2),
+                right = size.width,
+                bottom = size.height,
+                startAngle = 0f,
+                sweepAngle = 180f,
+                useCenter = false,
+                paint = paint
+        )
     }
 }
 
