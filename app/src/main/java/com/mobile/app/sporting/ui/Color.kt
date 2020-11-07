@@ -23,3 +23,9 @@ val selectedIconColor = Color(0xFFffbd00)
 
 val textColorOne = Color(0xFFcacbca)
 val textColorTwo = Color(0xFF302f39)
+
+val weekBarBgColor = Color(0xFFf7f8f7)
+val dayBarLow = Color(0xFFffbd00)
+val dayBarHigh = Color(0xFF2f2e38)
+val lowDayTextColor = Color(0xFFcbcccb)
+val highDayTextColor = Color(0xFF35343d)

@@ -19,15 +19,13 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.navigate
 import com.mobile.app.sporting.ui.*
 
@@ -139,7 +137,7 @@ fun HomeScreen(navController: NavController) {
                 Icon(Icons.Outlined.Person, tint = Color(0xff2f2e38))
             }
             Spacer(modifier = Modifier.height(16.dp))
-            WeeklyChart()
+            WeeklyChart(modifier = Modifier.align(Alignment.CenterHorizontally))
             Spacer(modifier = Modifier.preferredHeight(32.dp))
             PeriodRow(navController)
             Spacer(modifier = Modifier.preferredHeight(48.dp))
@@ -247,11 +245,52 @@ fun WeeklyChart(
     Surface(
             shape = RoundedCornerShape(16.dp),
             color = Color(0xFFfefffe),
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(0.95f)
                     .preferredHeight(180.dp),
             elevation = 4.dp
     ) {
+        Row(modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            dayBarItems.forEach { DayBarItem(day = it.day, level = it.level) }
+        }
+    }
+}
 
+@Composable fun DayBarItem(day: String, level: Float) {
+    Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        val high = level >= 0.7f
+        val textColor = if (high) highDayTextColor else lowDayTextColor
+        val bgColor = if (high) dayBarHigh else dayBarLow
+
+        Text(text = day, color = textColor, fontWeight = if (high) FontWeight.W500 else FontWeight.Normal)
+        Spacer(modifier = Modifier.height(10.dp))
+        LevelBar(load = level, bgColor = weekBarBgColor, fillColor = bgColor)
+    }
+}
+
+@Composable fun LevelBar(
+        load: Float,
+        bgColor: Color,
+        fillColor: Color,
+        modifier: Modifier = Modifier) {
+
+    val h = (load) * with(DensityAmbient.current) { 120.dp.toIntPx() }
+
+    Box(modifier = Modifier
+            .background(color = bgColor, shape = RoundedCornerShape(3.dp))
+    ) {
+        Spacer(modifier.width(6.dp).height(120.dp))
+        Spacer(modifier = modifier
+                .width(6.dp)
+                .height(with(DensityAmbient.current) { h.toDp()})
+                .background(color = fillColor, shape = RoundedCornerShape(3.dp))
+                .align(Alignment.BottomCenter))
     }
 }
 
@@ -311,3 +350,14 @@ fun Period(
         )
     }
 }
+
+data class DayBarData(val day: String, val level: Float)
+val dayBarItems = listOf(
+        DayBarData(day = "Mo", level = 0.2f),
+        DayBarData(day = "Tu", level = 0.2f),
+        DayBarData(day = "We", level = 0.9f),
+        DayBarData(day = "Th", level = 0.3f),
+        DayBarData(day = "Fr", level = 0.4f),
+        DayBarData(day = "Sa", level = 0.5f),
+        DayBarData(day = "Su", level = 0.7f),
+)
