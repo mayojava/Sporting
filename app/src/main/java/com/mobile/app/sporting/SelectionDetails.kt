@@ -1,6 +1,5 @@
 package com.mobile.app.sporting
 
-import android.text.TextPaint
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,17 +33,18 @@ import androidx.navigation.NavController
 import com.mobile.app.sporting.ui.*
 import dev.chrisbanes.accompanist.coil.CoilImage
 
-@Composable fun SelectionDetails(navController: NavController) {
+@Composable
+fun SelectionDetails(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         ConstraintLayout(
-                modifier = Modifier.fillMaxSize()
-                        .background(color = surfaceColor)
+            modifier = Modifier.fillMaxSize()
+                .background(color = surfaceColor)
         ) {
             val (
-                    headerRef,
-                    buttonRef,
-                    gapRef,
-                    itemsRef) = createRefs()
+                headerRef,
+                buttonRef,
+                gapRef,
+                itemsRef) = createRefs()
 
             Header(modifier = Modifier.constrainAs(headerRef) {
                 top.linkTo(parent.top)
@@ -58,20 +58,22 @@ import dev.chrisbanes.accompanist.coil.CoilImage
                 end.linkTo(parent.end)
             })
 
-            Spacer(modifier = Modifier.height(80.dp).width(6.dp).background(Color.Blue).constrainAs(gapRef) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(headerRef.bottom)
-            })
+            Spacer(
+                modifier = Modifier.height(80.dp).width(6.dp).background(Color.Blue)
+                    .constrainAs(gapRef) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(headerRef.bottom)
+                    })
 
             Column(
-                    modifier = Modifier.fillMaxWidth()
-                            .constrainAs(itemsRef) {
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                                top.linkTo(gapRef.bottom)
-                                bottom.linkTo(buttonRef.top, margin = 24.dp)
-                            }
+                modifier = Modifier.fillMaxWidth()
+                    .constrainAs(itemsRef) {
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                        top.linkTo(gapRef.bottom)
+                        bottom.linkTo(buttonRef.top, margin = 24.dp)
+                    }
             ) {
                 mockItems.forEach {
                     ItemRow(data = it, isHighlighted = it.row == 2)
@@ -79,7 +81,8 @@ import dev.chrisbanes.accompanist.coil.CoilImage
             }
         }
 
-        GraphCard(modifier = Modifier
+        GraphCard(
+            modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth(0.85f)
                 .offset(y = 200.dp)
@@ -88,157 +91,180 @@ import dev.chrisbanes.accompanist.coil.CoilImage
     }
 }
 
-@Composable fun GraphCard(
-        modifier: Modifier = Modifier
+@Composable
+fun GraphCard(
+    modifier: Modifier = Modifier
 ) {
     Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = graphCardBg,
-            elevation = 4.dp,
-            modifier = modifier
+        shape = RoundedCornerShape(16.dp),
+        color = graphCardBg,
+        elevation = 4.dp,
+        modifier = modifier
     ) {
 
     }
 }
 
-@Composable fun BottomButton(
-        modifier: Modifier = Modifier
+@Composable
+fun BottomButton(
+    modifier: Modifier = Modifier
 ) {
     Box(
-            modifier = modifier
-                    .clickable(onClick = {})
-                    .background(color = seeMoreBg, shape = RoundedCornerShape(32.dp))
-                    .fillMaxWidth(0.6f)
-                    .padding(start = 24.dp, end = 8.dp)
-                    .padding(vertical = 16.dp)
+        modifier = modifier
+            .clickable(onClick = {})
+            .background(color = seeMoreBg, shape = RoundedCornerShape(32.dp))
+            .fillMaxWidth(0.6f)
+            .padding(start = 24.dp, end = 8.dp)
+            .padding(vertical = 16.dp)
     ) {
         Text(
-                text = "See more",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.align(Alignment.CenterStart)
+            text = "See more",
+            color = Color.White,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.align(Alignment.CenterStart)
         )
-        Box(modifier = Modifier.size(32.dp)
+        Box(
+            modifier = Modifier.size(32.dp)
                 .align(Alignment.CenterEnd)
-                .background(Color.White, shape = CircleShape)) {
+                .background(Color.White, shape = CircleShape)
+        ) {
             Icon(
-                    Icons.Default.KeyboardArrowRight,
-                    tint = seeMoreBg,
-                    modifier = Modifier.align(Alignment.Center)
+                Icons.Default.KeyboardArrowRight,
+                tint = seeMoreBg,
+                modifier = Modifier.align(Alignment.Center)
             )
         }
     }
 }
 
-@Composable fun Header(
-        modifier: Modifier = Modifier,
-        navController: NavController
+@Composable
+fun Header(
+    modifier: Modifier = Modifier,
+    navController: NavController
 ) {
     val imgUrl = "https://i.pravatar.cc/200?img=30"
 
-    Box(modifier = modifier
+    Box(
+        modifier = modifier
             .height(300.dp)
             .background(
-                    color = selectionHeaderBgColor,
-                    shape = RoundedCornerShape(bottomRight = 32.dp, bottomLeft = 32.dp))
+                color = selectionHeaderBgColor,
+                shape = RoundedCornerShape(bottomRight = 32.dp, bottomLeft = 32.dp)
+            )
     ) {
-        IconButton(onClick = { navController.popBackStack() }, modifier = Modifier.padding(top = 36.dp)) {
+        IconButton(
+            onClick = { navController.popBackStack() },
+            modifier = Modifier.padding(top = 36.dp)
+        ) {
             Icon(Icons.Default.ArrowBack, tint = Color.White)
         }
 
-        Column(modifier = Modifier
+        Column(
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 36.dp)
                 .padding(horizontal = 16.dp),
         ) {
             Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Box(
-                        modifier = Modifier.size(84.dp)
-                                .background(imageBgColor, shape = CircleShape)
+                    modifier = Modifier.size(84.dp)
+                        .background(imageBgColor, shape = CircleShape)
                 ) {
                     CoilImage(
-                            data = imgUrl,
-                            modifier = Modifier.size(78.dp)
-                                    .clip(CircleShape)
-                                    .align(Alignment.Center)
+                        data = imgUrl,
+                        modifier = Modifier.size(78.dp)
+                            .clip(CircleShape)
+                            .align(Alignment.Center)
                     )
 
                     Box(
-                            modifier = Modifier
-                                    .offset(x=-2.dp, y = -2.dp)
-                                    .size(24.dp)
-                                    .background(color = Color.White, shape = CircleShape)
-                                    .align(Alignment.BottomEnd)
+                        modifier = Modifier
+                            .offset(x = -2.dp, y = -2.dp)
+                            .size(24.dp)
+                            .background(color = Color.White, shape = CircleShape)
+                            .align(Alignment.BottomEnd)
 
                     ) {
                         Text(
-                                text = "23",
-                                color = headerCounterTextColor,
-                                modifier = Modifier.align(Alignment.Center),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 14.sp
+                            text = "23",
+                            color = headerCounterTextColor,
+                            modifier = Modifier.align(Alignment.Center),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
                         )
                     }
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                        text = "Gabriella Estrada",
-                        color = selectionHeaderText,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold
+                    text = "Gabriella Estrada",
+                    color = selectionHeaderText,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
-            
+
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                    text = "Rent Surfing",
-                    color = selectionHeaderText,
-                    fontSize = 28.sp,
-                    fontWeight = FontWeight.Bold
+                text = "Rent Surfing",
+                color = selectionHeaderText,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }
 }
 
-@Composable fun ItemRow(
-        data: ItemRowData,
-        isHighlighted: Boolean,
-        modifier: Modifier = Modifier
+@Composable
+fun ItemRow(
+    data: ItemRowData,
+    isHighlighted: Boolean,
+    modifier: Modifier = Modifier
 ) {
     Surface(
-            color = if (isHighlighted) graphCardBg else surfaceColor,
-            shape = if (isHighlighted) RoundedCornerShape(topRight = 56.dp) else RectangleShape,
-            modifier = modifier.fillMaxWidth()
+        color = if (isHighlighted) graphCardBg else surfaceColor,
+        shape = if (isHighlighted) RoundedCornerShape(topRight = 56.dp) else RectangleShape,
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).padding(end = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp).padding(end = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Spacer(modifier = Modifier.size(8.dp))
             RowNumber(isHighlighted = isHighlighted, data.row)
             Column(horizontalAlignment = Alignment.Start) {
 
-                Row(modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(text = data.country, color = textColorOne)
-                    Icon(Icons.Default.Star,
-                            tint = if (isHighlighted) selectedIconColor else unselectedColor,
+                    Icon(
+                        Icons.Default.Star,
+                        tint = if (isHighlighted) selectedIconColor else unselectedColor,
                     )
                 }
                 Spacer(modifier = Modifier.size(2.dp))
-                Text(text = data.title, color = textColorTwo, fontSize = 18.sp, fontWeight = FontWeight.W500)
+                Text(
+                    text = data.title,
+                    color = textColorTwo,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.W500
+                )
                 Spacer(modifier = Modifier.size(2.dp))
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
                     Text(text = data.price, color = textColorOne)
                     Text(
-                            text = "more",
-                            color = if (isHighlighted) selectedColor else unselectedColor,
-                            textDecoration = TextDecoration.Underline
+                        text = "more",
+                        color = if (isHighlighted) selectedColor else unselectedColor,
+                        textDecoration = TextDecoration.Underline
                     )
                 }
             }
@@ -246,32 +272,41 @@ import dev.chrisbanes.accompanist.coil.CoilImage
     }
 }
 
-@Composable fun RowNumber(isHighlighted: Boolean, row: Int) {
+@Composable
+fun RowNumber(isHighlighted: Boolean, row: Int) {
 
     if (isHighlighted) {
         StyledRowNumber(width = 24.dp, height = 48.dp) {
-            Text(text = "$row", modifier = Modifier.align(Alignment.Center), color = rowNumberTextColor)
+            Text(
+                text = "$row",
+                modifier = Modifier.align(Alignment.Center),
+                color = rowNumberTextColor
+            )
         }
     } else {
         RegularRowNumber(row = row)
     }
 }
 
-@Composable fun RegularRowNumber(row: Int) {
-        Box(
-            modifier = Modifier
-                    .size(32.dp)
-                    .background(color = unselectedColor, shape = CircleShape)
+@Composable
+fun RegularRowNumber(row: Int) {
+    Box(
+        modifier = Modifier
+            .size(32.dp)
+            .background(color = unselectedColor, shape = CircleShape)
     ) {
         Text(text = "$row", color = rowNumberTextColor, modifier = Modifier.align(Alignment.Center))
     }
 }
 
-@Composable fun StyledRowNumber(
-        width: Dp,
-        height: Dp,
-        content: @Composable BoxScope.() -> Unit) {
-    Box(modifier = Modifier
+@Composable
+fun StyledRowNumber(
+    width: Dp,
+    height: Dp,
+    content: @Composable BoxScope.() -> Unit
+) {
+    Box(
+        modifier = Modifier
             .width(width)
             .height(height)
             .drawIcon(bgColor = selectedColor)
@@ -285,48 +320,48 @@ fun Modifier.drawIcon(bgColor: Color) = this.drawBehind {
         isAntiAlias = true
         color = bgColor
     }
-    
+
     drawIntoCanvas { canvas ->
-        val arcHeight = size.height/4
-        
+        val arcHeight = size.height / 4
+
         val rect = Rect(
-                topLeft = Offset(0f, arcHeight),
-                bottomRight = Offset(size.width, size.height-arcHeight)
+            topLeft = Offset(0f, arcHeight),
+            bottomRight = Offset(size.width, size.height - arcHeight)
         )
 
         canvas.drawRect(rect, paint)
 
         canvas.drawArc(
-                left = 0f,
-                top = 0f,
-                right = size.width,
-                bottom = arcHeight*2,
-                startAngle = 360f,
-                sweepAngle = -180f,
-                useCenter = false, paint = paint
+            left = 0f,
+            top = 0f,
+            right = size.width,
+            bottom = arcHeight * 2,
+            startAngle = 360f,
+            sweepAngle = -180f,
+            useCenter = false, paint = paint
         )
 
         canvas.drawArc(
-                left = 0f,
-                top = size.height-(arcHeight*2),
-                right = size.width,
-                bottom = size.height,
-                startAngle = 0f,
-                sweepAngle = 180f,
-                useCenter = false,
-                paint = paint
+            left = 0f,
+            top = size.height - (arcHeight * 2),
+            right = size.width,
+            bottom = size.height,
+            startAngle = 0f,
+            sweepAngle = 180f,
+            useCenter = false,
+            paint = paint
         )
     }
 }
 
 data class ItemRowData(
-        val row: Int,
-        val country: String,
-        val title: String,
-        val price: String
+    val row: Int,
+    val country: String,
+    val title: String,
+    val price: String
 )
 
 val mockItems = listOf(
-        ItemRowData(1,"Australia", "Rent Surfing on Sydney's", "from $61.00"),
-        ItemRowData(2,"USA", "Rent Surfing on California", "from $72.00")
+    ItemRowData(1, "Australia", "Rent Surfing on Sydney's", "from $61.00"),
+    ItemRowData(2, "USA", "Rent Surfing on California", "from $72.00")
 )

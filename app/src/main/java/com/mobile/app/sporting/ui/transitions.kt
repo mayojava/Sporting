@@ -1,5 +1,6 @@
 package com.mobile.app.sporting.ui
 
+import androidx.compose.animation.ColorPropKey
 import androidx.compose.animation.DpPropKey
 import androidx.compose.animation.core.*
 import androidx.compose.ui.unit.dp

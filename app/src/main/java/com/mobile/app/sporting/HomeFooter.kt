@@ -1,5 +1,7 @@
 package com.mobile.app.sporting
 
+import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollableRow
 import androidx.compose.foundation.Text
@@ -9,44 +11,63 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.onActive
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.drawLayer
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageAsset
+import androidx.compose.ui.platform.DensityAmbient
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 val mockSurfers = listOf(
-        R.drawable.surfer_one,
-        R.drawable.surfer_two,
-        R.drawable.surfer_three,
-        R.drawable.surfer_four
+    R.drawable.surfer_one,
+    R.drawable.surfer_two,
+    R.drawable.surfer_three,
+    R.drawable.surfer_four
 )
 
-@Composable fun Footer(
+@Composable
+fun Footer(
     surfers: List<Int> = mockSurfers,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier
-                .background(shape = RoundedCornerShape(topRight = 64.dp), color = Color(0xffff0151))
-                .padding(vertical = 24.dp)
-                .padding(start = 24.dp)
-                .preferredHeight(180.dp)
+            .background(shape = RoundedCornerShape(topRight = 64.dp), color = Color(0xffff0151))
+            .padding(vertical = 24.dp)
+            .padding(start = 24.dp)
+            .preferredHeight(180.dp)
     ) {
         Box {
+            val t = animatedFloat(initVal = 1f)
+            val t2 = animatedFloat(initVal = 1f)
+            val density = DensityAmbient.current
+
+            onActive {
+                t.animateTo(0f, tween(durationMillis = 800))
+                t2.animateTo(0f, tween(durationMillis = 1000))
+            }
+
             Text(
-                    text = "Rental equipment",
-                    style = MaterialTheme.typography.h3,
+                text = "Rental equipment",
+                style = MaterialTheme.typography.h4.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFFf0004c)
+                    fontSize = 38.sp,
+                    letterSpacing = 1.5.sp
+                ),
+                color = Color(0xFFf0004c),
+                modifier = Modifier.drawLayer(translationX = with(density) { 240.dp.toPx() * t2.value })
             )
 
             Text(
-                    text = "Rental equipment",
-                    color = Color.White,
-                    style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold)
+                text = "Rental equipment",
+                color = Color.White,
+                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.Bold),
+                modifier = Modifier.drawLayer(
+                    translationX = with(density) { -128.dp.toPx() * t.value }
+                )
             )
         }
 
@@ -54,11 +75,11 @@ val mockSurfers = listOf(
         ScrollableRow {
             surfers.forEach { surfer ->
                 Surface(
-                        shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp)
                 ) {
                     Image(
-                            asset = imageResource(id = surfer),
-                            modifier = Modifier.size(140.dp)
+                        asset = imageResource(id = surfer),
+                        modifier = Modifier.size(140.dp)
                     )
                 }
 
