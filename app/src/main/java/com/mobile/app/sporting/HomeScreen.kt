@@ -87,7 +87,7 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(48.dp))
 
             ChipsLayout(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().background(color = Color.Cyan),
                 itemCount = 3,
                 selectedIndex = selectedIndex
             ) {
