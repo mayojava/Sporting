@@ -1,10 +1,8 @@
 package com.mobile.app.sporting
 
-import androidx.compose.animation.animatedColor
-import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.*
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.transition
 import androidx.compose.foundation.ScrollableColumn
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.background
@@ -37,8 +35,14 @@ import androidx.navigation.compose.navigate
 import com.mobile.app.sporting.ui.*
 
 @Composable
+@ExperimentalAnimationApi
 fun HomeScreen(navController: NavController) {
     var selectedIndex by remember { mutableStateOf(0) }
+    var visibility by remember { mutableStateOf(false) }
+
+    onActive {
+        visibility = true
+    }
 
     Box(
         Modifier.fillMaxSize()
@@ -87,7 +91,7 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(48.dp))
 
             ChipsLayout(
-                modifier = Modifier.fillMaxWidth().background(color = Color.Cyan),
+                modifier = Modifier.fillMaxWidth(),
                 itemCount = 3,
                 selectedIndex = selectedIndex
             ) {
@@ -109,10 +113,11 @@ fun HomeScreen(navController: NavController) {
 
             Row(
                 Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
-                    Modifier.weight(1f)
+                    //Modifier.weight(1f)
                 ) {
                     val state = transition(
                         definition = textValueTransDef,
@@ -132,17 +137,25 @@ fun HomeScreen(navController: NavController) {
                     )
                 }
 
-                Text(
-                    text = "profile",
-                    color = Color(0xff2f2e38),
-                    style = TextStyle(
-                        fontWeight = FontWeight.W600,
-                        fontSize = 18.sp,
-                        letterSpacing = 1.sp
-                    )
-                )
-                Spacer(modifier = Modifier.preferredWidth(6.dp))
-                Icon(Icons.Outlined.Person, tint = Color(0xff2f2e38))
+                Row {
+                    AnimatedVisibility(
+                            visible = visibility,
+                            enter = expandHorizontally(expandFrom = Alignment.End, animSpec = tween(durationMillis = 400))
+                                    + fadeIn(animSpec = tween(durationMillis = 1200))
+                    ) {
+                        Text(
+                                text = "profile",
+                                color = Color(0xff2f2e38),
+                                style = TextStyle(
+                                        fontWeight = FontWeight.W600,
+                                        fontSize = 18.sp,
+                                        letterSpacing = 1.sp
+                                )
+                        )
+                    }
+                    Spacer(modifier = Modifier.preferredWidth(6.dp))
+                    Icon(Icons.Outlined.Person, tint = Color(0xff2f2e38))
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
             WeeklyChart(modifier = Modifier.align(Alignment.CenterHorizontally))
@@ -224,11 +237,11 @@ fun UnselectedChip(
         fontWeight = FontWeight.Bold,
         modifier = Modifier
             .clickable(onClick = { onSelectedIndexChange(index) })
-        //.background(color = Color.Green)
     )
 }
 
 @Composable
+@ExperimentalAnimationApi
 fun SelectedChip(label: String) {
     Surface(
         shape = RoundedCornerShape(16.dp),
