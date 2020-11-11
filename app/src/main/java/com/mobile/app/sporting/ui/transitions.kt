@@ -83,22 +83,18 @@ val iconTransitionDefinition = transitionDefinition<Int> {
 }
 
 val rotationX = FloatPropKey()
-val rotationZ = FloatPropKey()
-
 val weekChartTransitionDef = transitionDefinition<String> {
     state("start") {
-        this[rotationX] = 60.0f
-        this[rotationZ] = -20f
+        this[rotationX] = -180.0f
     }
 
     state("end") {
         this[rotationX] = 0f
-        this[rotationZ] = 0f
     }
 
     transition("start" to "end") {
         rotationX using tween(
-                durationMillis = 1000,
+                durationMillis = 400,
                 easing = LinearOutSlowInEasing
         )
     }
