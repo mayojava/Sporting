@@ -94,7 +94,7 @@ val weekChartTransitionDef = transitionDefinition<String> {
 
     transition("start" to "end") {
         rotationX using tween(
-                durationMillis = 400,
+                durationMillis = 800,
                 easing = LinearOutSlowInEasing
         )
     }

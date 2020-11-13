@@ -88,20 +88,19 @@ fun HomeScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.height(48.dp))
 
-            ChipsLayout(
-                    modifier = Modifier.fillMaxWidth(),
-                    itemCount = 3,
-                    selectedIndex = selectedIndex
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-
                 listOf("Surfing", "Snowboard", "Skiing").forEachIndexed { index, title ->
                     if (index == selectedIndex) {
                         SelectedChip(label = title)
                     } else {
                         UnselectedChip(
-                                label = title,
-                                index = index,
-                                onSelectedIndexChange = { selectedIndex = it }
+                            label = title,
+                            index = index,
+                            onSelectedIndexChange = { selectedIndex = it }
                         )
                     }
                 }
@@ -274,6 +273,7 @@ fun WeeklyChart(
             modifier = modifier.fillMaxWidth(0.95f)
                     .preferredHeight(180.dp)
                     .drawLayer(
+                            cameraDistance = 40f,
                             rotationX = transition[rotationX],
                             transformOrigin = TransformOrigin(1.0f,1.0f)
                     ),
