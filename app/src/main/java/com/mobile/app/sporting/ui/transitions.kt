@@ -100,6 +100,24 @@ val weekChartTransitionDef = transitionDefinition<String> {
     }
 }
 
+val detailsGraphRotationX = FloatPropKey()
+val detailsGraphTransitionDef = transitionDefinition<String> {
+    state("start") {
+        this[detailsGraphRotationX] = -90f
+    }
+
+    state("stop") {
+        this[detailsGraphRotationX] = 0f
+    }
+
+    transition("start" to "stop") {
+        detailsGraphRotationX using tween(
+            durationMillis = 200,
+            delayMillis = 1000
+        )
+    }
+}
+
 val barLoadPropKey = FloatPropKey()
 val barLoadTransitionDef = transitionDefinition<Int> {
     state(1) {

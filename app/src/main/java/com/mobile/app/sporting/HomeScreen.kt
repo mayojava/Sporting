@@ -38,7 +38,7 @@ fun HomeScreen(navController: NavController) {
     var selectedIndex by remember { mutableStateOf(0) }
     var visibility by remember { mutableStateOf(false) }
 
-    onActive {
+    SideEffect {
         visibility = true
     }
 
@@ -221,20 +221,35 @@ fun ChipsLayout(
 }
 
 @Composable
+@ExperimentalAnimationApi
 fun UnselectedChip(
         label: String,
         index: Int,
         onSelectedIndexChange: (Int) -> Unit
 ) {
-    Text(
+    var visibility by remember { mutableStateOf(false) }
+    SideEffect {
+        visibility = true
+    }
+    AnimatedVisibility(
+        visible = visibility,
+        enter = fadeIn(
+            animSpec = tween(durationMillis = 200)
+        ) + expandHorizontally(
+            expandFrom = Alignment.End,
+            animSpec = tween(durationMillis = 400)
+        )
+    ) {
+        Text(
             text = label,
             color = Color(0xffcbcccb),
             textAlign = TextAlign.Center,
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                    .clickable(onClick = { onSelectedIndexChange(index) })
-    )
+                .clickable(onClick = { onSelectedIndexChange(index) })
+        )
+    }
 }
 
 @Composable
@@ -389,7 +404,7 @@ fun Period(
         delay: Int = 0
 ) {
     val animController = animatedFloat(initVal = 1f)
-    onActive {
+    SideEffect {
         animController.animateTo(
                 0f,
                 tween(durationMillis = 400 + delay, easing = LinearOutSlowInEasing)

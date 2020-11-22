@@ -2,6 +2,7 @@ package com.mobile.app.sporting
 
 import androidx.compose.animation.animatedFloat
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.transition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -59,7 +60,7 @@ fun SelectionDetails(navController: NavController) {
             }, navController = navController)
 
             Spacer(
-                    modifier = Modifier.height(80.dp).width(6.dp).background(Color.Blue)
+                    modifier = Modifier.height(80.dp).width(6.dp)
                             .constrainAs(gapRef) {
                                 start.linkTo(parent.start)
                                 top.linkTo(headerRef.bottom)
@@ -86,12 +87,18 @@ fun SelectionDetails(navController: NavController) {
             })
         }
 
+        val cardState = transition(
+            definition = detailsGraphTransitionDef, toState = "stop", initState = "start")
         GraphCard(
                 modifier = Modifier
                         .align(Alignment.TopCenter)
                         .fillMaxWidth(0.85f)
                         .offset(y = 200.dp)
-                        .height(180.dp).drawLayer(alpha = 0f)
+                        .height(180.dp)
+                    .drawLayer(
+                        cameraDistance = 40f,
+                        rotationX = cardState[detailsGraphRotationX]
+                    )
         )
     }
 }
