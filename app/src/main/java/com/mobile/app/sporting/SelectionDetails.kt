@@ -1,8 +1,7 @@
 package com.mobile.app.sporting
 
-import androidx.compose.animation.animatedFloat
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.transition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,8 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.onActive
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,8 +37,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mobile.app.sporting.ui.*
 import dev.chrisbanes.accompanist.coil.CoilImage
+import kotlinx.coroutines.delay
 
 @Composable
+@ExperimentalAnimationApi
 fun SelectionDetails(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         ConstraintLayout(
@@ -118,18 +118,27 @@ fun GraphCard(
 }
 
 @Composable
+@ExperimentalAnimationApi
 fun BottomButton(
         modifier: Modifier = Modifier
 ) {
     val buttonOffset = animatedFloat(initVal = 0f)
     val iconBgAlpha = animatedFloat(initVal = 0f)
     val iconScale = animatedFloat(initVal = 1f)
+    var visibility by remember { mutableStateOf(false) }
+
+
 
     onActive{
         buttonOffset.animateTo(1f, tween(durationMillis = 1000, delayMillis = 200))
         iconScale.animateTo(0.1f, tween(durationMillis = 800, delayMillis = 400)) {_, _ ->
             iconScale.animateTo(1f, tween(durationMillis = 100))
         }
+    }
+
+    LaunchedEffect(subject = true) {
+        delay(200L)
+        visibility = !visibility
     }
 
     Box(
@@ -141,13 +150,23 @@ fun BottomButton(
                     .padding(start = 24.dp, end = 8.dp)
                     .padding(vertical = 16.dp)
     ) {
-        Text(
-                text = "See more",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
+        AnimatedVisibility(
+                visible = visibility,
+                enter = fadeIn() + expandHorizontally(
+                        expandFrom = Alignment.Start,
+                        animSpec = tween(durationMillis = 250, delayMillis = 50)
+                ),
                 modifier = Modifier.align(Alignment.CenterStart)
-        )
+        ) {
+            Text(
+                    text = "See more",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(Alignment.CenterStart)
+            )
+        }
+
         Box(
                 modifier = Modifier.size(32.dp)
                         .align(Alignment.CenterEnd)

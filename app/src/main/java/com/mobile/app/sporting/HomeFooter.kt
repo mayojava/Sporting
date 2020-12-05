@@ -30,8 +30,8 @@ val mockSurfers = listOf(
 
 @Composable
 fun Footer(
+    modifier: Modifier = Modifier,
     surfers: List<Int> = mockSurfers,
-    modifier: Modifier = Modifier
 ) {
     Column(
         modifier
@@ -78,7 +78,7 @@ fun Footer(
                     shape = RoundedCornerShape(16.dp)
                 ) {
                     Image(
-                        asset = imageResource(id = surfer),
+                        bitmap = imageResource(id = surfer),
                         modifier = Modifier.size(140.dp)
                     )
                 }
